@@ -38,7 +38,7 @@ export class Address {
   }
 
   get intNumber(): string | null {
-    return this._entityRoot.intNumber;
+    return this._entityRoot.intNumber ?? null;
   }
 
   get neighborhood(): string {
