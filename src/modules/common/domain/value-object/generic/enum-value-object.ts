@@ -1,19 +1,21 @@
-export abstract class EnumValueObject<T> {
-  readonly _value: T;
+import ValidationDomainException from '@common/domain/exceptions/validation.exception';
 
+import { ValueObject } from './value-object';
+
+export abstract class EnumValueObject<T> extends ValueObject<T> {
   constructor(
     value: T,
-    public readonly validValues: T[],
+    readonly validValues: T[],
   ) {
-    this._value = value;
+    super(value);
     this.checkValueIsValid(value);
   }
 
-  public checkValueIsValid(value: T): void {
+  private checkValueIsValid(value: T): void {
     if (!this.validValues.includes(value)) {
-      this.throwErrorForInvalidValue(value);
+      throw new ValidationDomainException(
+        `Value <${value}> is not valid for enum ${this.constructor.name}. Valid values are: ${this.validValues.join(', ')}`,
+      );
     }
   }
-
-  protected abstract throwErrorForInvalidValue(value: T): void;
 }

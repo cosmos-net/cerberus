@@ -1,8 +1,8 @@
 import BusinessConflictDomainException from '@common/domain/exceptions/business-conflict.exception';
 
-export type PrimitivesType = string | number | boolean | Date;
+export type ValueObjectPrimitiveType = string | number | boolean | Date;
 
-export abstract class ValueObject<T extends PrimitivesType> {
+export abstract class ValueObject<T extends ValueObjectPrimitiveType> {
   readonly _value: T;
 
   constructor(value: T) {
