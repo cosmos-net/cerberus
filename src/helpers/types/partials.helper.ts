@@ -1,13 +1,13 @@
-export type DeepPartial<T> = {
+export type DeepPartialType<T> = {
   [P in keyof T]?: T[P] extends (infer U)[]
-    ? DeepPartial<U>[]
+    ? DeepPartialType<U>[]
     : T[P] extends object
-      ? DeepPartial<T[P]>
+      ? DeepPartialType<T[P]>
       : T[P];
 };
 
-export type PartialExcept<T, K extends keyof T> = {
+export type PartialExceptType<T, K extends keyof T> = {
   [P in K]: T[P];
 } & {
-  [P in Exclude<keyof T, K>]?: T[P] extends object ? PartialExcept<T[P], keyof T[P]> : T[P];
+  [P in Exclude<keyof T, K>]?: T[P] extends object ? PartialExceptType<T[P], keyof T[P]> : T[P];
 };
