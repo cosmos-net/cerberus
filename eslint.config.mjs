@@ -112,7 +112,7 @@ export default tseslint.config(
       '@typescript-eslint/no-empty-interface': 'off',
       '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/naming-convention': [
-        'warn', // Cambio de 'error' a 'warn'
+        'error',
         {
           selector: 'default',
           format: ['camelCase', 'PascalCase', 'UPPER_CASE'],
@@ -132,9 +132,8 @@ export default tseslint.config(
         {
           selector: 'interface',
           format: ['PascalCase'],
-          // Hacer el prefijo "I" opcional
           custom: {
-            regex: '^I?[A-Z][a-zA-Z]*$',
+            regex: '^I[A-Z][a-zA-Z]*$',
             match: true,
           },
         },
@@ -144,11 +143,16 @@ export default tseslint.config(
         },
         {
           selector: 'enumMember',
-          format: ['UPPER_CASE', 'PascalCase'], // Permitir PascalCase también
+          format: ['UPPER_CASE', 'PascalCase'],
         },
         {
           selector: 'class',
           format: ['PascalCase'],
+        },
+        {
+          selector: 'typeAlias',
+          format: ['PascalCase'],
+          suffix: ['Type']
         }
       ],
       
