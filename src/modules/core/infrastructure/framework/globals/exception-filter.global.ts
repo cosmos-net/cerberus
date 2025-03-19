@@ -4,20 +4,20 @@ import { RpcException } from '@nestjs/microservices';
 import { Request } from 'express';
 import { Observable, throwError } from 'rxjs';
 
-interface IError {
+type ErrorType = {
   message?: string;
   name?: string;
   status?: number;
-}
+};
 
-interface IBodyResponse {
+type ResponseType = {
   data: unknown;
   timestamp: string;
   path: string;
   method: string;
   stacktrace?: string;
-  error?: IError | string;
-}
+  error?: ErrorType | string;
+};
 
 @Catch(RpcException)
 export class ExceptionFilter implements RpcExceptionFilter<RpcException> {
@@ -30,7 +30,7 @@ export class ExceptionFilter implements RpcExceptionFilter<RpcException> {
     const error = exception.getError();
     const isProduction = this.config.get<string>('servers.serverEnv') === 'production';
 
-    let bodyResponse: IBodyResponse = {
+    let bodyResponse: ResponseType = {
       data: {},
       timestamp: new Date().toISOString(),
       path: request.url,
@@ -40,9 +40,9 @@ export class ExceptionFilter implements RpcExceptionFilter<RpcException> {
     };
 
     if (typeof error !== 'string') {
-      const message = (error as IError).message ?? 'Internal Server Error';
-      const name = (error as IError).name ?? 'Error';
-      const status = (error as IError).status ?? 500;
+      const message = (error as ErrorType).message ?? 'Internal Server Error';
+      const name = (error as ErrorType).name ?? 'Error';
+      const status = (error as ErrorType).status ?? 500;
 
       bodyResponse = {
         ...bodyResponse,
@@ -55,6 +55,6 @@ export class ExceptionFilter implements RpcExceptionFilter<RpcException> {
     }
 
     this.logger.error(`Error: ${JSON.stringify(bodyResponse)}`);
-    return throwError((): IBodyResponse => bodyResponse);
+    return throwError((): ResponseType => bodyResponse);
   }
 }
