@@ -2,16 +2,16 @@ import { ExceptionFilter, Catch, ArgumentsHost, HttpException, Logger } from '@n
 import { Request } from 'express';
 import { Observable, throwError } from 'rxjs';
 
-interface IError {
+type ErrorType = {
   message?: string;
   name?: string;
   status?: number;
-}
+};
 
-interface IBodyResponse {
+type ErrorResponseType = {
   stack?: string;
-  error?: IError | string;
-}
+  error?: ErrorType | string;
+};
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -31,7 +31,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       }`,
     );
 
-    const bodyResponse: IBodyResponse = {
+    const bodyResponse: ErrorResponseType = {
       stack: exception.stack,
       error: {
         message,
@@ -40,6 +40,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
       },
     };
 
-    return throwError((): IBodyResponse => bodyResponse);
+    return throwError((): ErrorResponseType => bodyResponse);
   }
 }
