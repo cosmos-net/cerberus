@@ -5,26 +5,26 @@ import { Observable, throwError } from 'rxjs';
 import DomainException from '@common/domain/exceptions/domain.exception';
 import handleDomainException from '@common/infrastructure/exceptions/handle-domain-exception';
 
-interface IError {
+type ErrorType = {
   message?: string;
   name?: string;
   status?: number;
   stack?: string;
-}
+};
 
-interface IBodyResponse {
+type ErrorResponseType = {
   stack?: string;
-  error?: IError | string;
-}
+  error?: ErrorType | string;
+};
 
 @Catch(RpcException)
 export class MicroserviceExceptionFilter implements RpcExceptionFilter<RpcException> {
   private readonly logger = new Logger(MicroserviceExceptionFilter.name);
 
-  catch(exception: RpcException, _host: ArgumentsHost): Observable<IBodyResponse> {
+  catch(exception: RpcException, _host: ArgumentsHost): Observable<ErrorResponseType> {
     const error = exception.getError();
 
-    let bodyResponse: IBodyResponse = {
+    let bodyResponse: ErrorResponseType = {
       error,
     };
 
@@ -49,7 +49,7 @@ export class MicroserviceExceptionFilter implements RpcExceptionFilter<RpcExcept
       const message = errorDetails.message ?? 'Internal Server Error';
       const name = errorDetails.name ?? 'Error';
       const status = errorDetails.status ?? 500;
-      const stack = (error as IError).stack ?? '';
+      const stack = (error as ErrorType).stack ?? '';
 
       bodyResponse = {
         ...bodyResponse,
