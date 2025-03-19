@@ -11,14 +11,14 @@ import UnauthorizedAccessDomainException from '@common/domain/exceptions/unautho
 import ValidationDomainException from '@common/domain/exceptions/validation.exception';
 import exceptionMapping from '@common/infrastructure/exceptions/exception-mapping';
 
-type StructureError = {
+type DomainErrorType = {
   statusCode: number;
   message: string;
 };
 
 const INTERNAL_SERVER_ERROR = 500;
 
-export default function handleDomainException(error: DomainException): StructureError {
+export default function handleDomainException(error: DomainException): DomainErrorType {
   const exceptionType = error.constructor as typeof DomainException;
 
   if (exceptionMapping.has(exceptionType)) {
