@@ -1,31 +1,32 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-export interface IResponse<T> {
+export type ResponseType<T> = {
   statusCode: number;
   errors: object;
   data: T;
   timestamp: string;
   path: string;
-}
+};
 
 @Injectable()
-export class TransformInterceptor<T> implements NestInterceptor<T, IResponse<T>> {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<IResponse<T>> {
+export class TransformInterceptor<T> implements NestInterceptor<T, ResponseType<T>> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<ResponseType<T>> {
     return next.handle().pipe(
-      map((data: T): IResponse<T> => {
+      map((data: T): ResponseType<T> => {
         const response = context.switchToHttp().getResponse<Response>();
+        const request = context.switchToHttp().getRequest<Request>();
 
         if (data === undefined) {
           response.status(204).send();
-          return undefined as unknown as IResponse<T>;
+          return undefined as unknown as ResponseType<T>;
         }
 
         if (data === null) {
           response.status(404);
-          return undefined as unknown as IResponse<T>;
+          return undefined as unknown as ResponseType<T>;
         }
 
         return {
@@ -33,8 +34,8 @@ export class TransformInterceptor<T> implements NestInterceptor<T, IResponse<T>>
           errors: {},
           data,
           timestamp: new Date().toISOString(),
-          path: context.switchToHttp().getRequest().url,
-        } as IResponse<T>;
+          path: request.url,
+        } as ResponseType<T>;
       }),
     );
   }
