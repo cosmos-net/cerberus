@@ -13,7 +13,7 @@ export async function bootstrap(): Promise<void> {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(CoreModule, {
     transport: Transport.NATS,
     options: {
-      url: process.env.NATS_URL || 'nats://localhost:4222',
+      servers: [process.env.NATS_URL || 'nats://localhost:4222'],
     },
   });
 
