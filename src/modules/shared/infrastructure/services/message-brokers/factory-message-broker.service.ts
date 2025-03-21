@@ -9,7 +9,7 @@ import { NatsMessageBrokerService } from '@shared/infrastructure/services/messag
 
 @Injectable()
 export class FactoryMessageBrokerService {
-  private constructor(private readonly config: IMessageBrokerConfigType) {}
+  public constructor(private readonly config: IMessageBrokerConfigType) {}
 
   private getBroker(): IMessageBroker {
     const { transport } = this.config;
