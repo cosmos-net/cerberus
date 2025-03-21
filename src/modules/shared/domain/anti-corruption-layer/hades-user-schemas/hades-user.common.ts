@@ -8,7 +8,7 @@ export interface IAccount {
 export interface IProfile {
   names: string[];
   lastName: string;
-  secondLastName: string;
+  secondLastName?: string;
   phoneNumber: string;
   gender: string;
   address: IAddress;
@@ -17,7 +17,7 @@ export interface IProfile {
 export interface IAddress {
   street: string;
   extNumber: string;
-  intNumber: string;
+  intNumber?: string;
   neighborhood: string;
   zipCode: string;
   city: string;
