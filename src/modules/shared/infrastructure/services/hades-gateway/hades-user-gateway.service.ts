@@ -1,17 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Transport } from '@nestjs/microservices';
 
-import { IHadesUserCreateRequest } from 'src/modules/shared/domain/anti-corruption-layer/hades-user-schemas/create-user/hades-user-create.request';
-import { IHadesUserCreateResponse } from 'src/modules/shared/domain/anti-corruption-layer/hades-user-schemas/create-user/hades-user.response';
-import { IHadesGatewayContract } from 'src/modules/shared/domain/contracts/hades-user-gateway.contract';
+import { IHadesUserCreateRequest } from '@shared/domain/anti-corruption-layer/hades-user-schemas/create-user/hades-user-create.request';
+import { IHadesUserCreateResponse } from '@shared/domain/anti-corruption-layer/hades-user-schemas/create-user/hades-user.response';
+import { IHadesGatewayContract } from '@shared/domain/contracts/hades-user-gateway.contract';
 import {
   IMessageBroker,
   IMessageBrokerConfigType,
-} from 'src/modules/shared/domain/contracts/message-broker.contract';
-import { HadesCommunicationException } from 'src/modules/shared/infrastructure/exceptions/broker-communication.exception';
-import { HadesConnectionException } from 'src/modules/shared/infrastructure/exceptions/broker-connection.exception';
-import { HadesDisconnectionException } from 'src/modules/shared/infrastructure/exceptions/broker-disconnection.exception';
-import { FactoryMessageBrokerService } from 'src/modules/shared/infrastructure/services/message-brokers/factory-message-broker.service';
+} from '@shared/domain/contracts/message-broker.contract';
+import { HadesCommunicationException } from '@shared/infrastructure/exceptions/broker-communication.exception';
+import { HadesConnectionException } from '@shared/infrastructure/exceptions/broker-connection.exception';
+import { HadesDisconnectionException } from '@shared/infrastructure/exceptions/broker-disconnection.exception';
+import { FactoryMessageBrokerService } from '@shared/infrastructure/services/message-brokers/factory-message-broker.service';
 
 @Injectable()
 export class HadesGatewayService implements IHadesGatewayContract {
