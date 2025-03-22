@@ -1,10 +1,8 @@
-import { Injectable } from '@nestjs/common';
 import { ClientProxy, ClientProxyFactory, NatsOptions } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 
 import { IMessageBroker } from '@shared/domain/contracts/message-broker.contract';
 
-@Injectable()
 export class NatsMessageBrokerService implements IMessageBroker {
   private readonly client: ClientProxy;
   constructor(options: NatsOptions) {
