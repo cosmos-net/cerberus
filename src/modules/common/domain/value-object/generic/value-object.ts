@@ -23,6 +23,6 @@ export abstract class ValueObject<T extends ValueObjectPrimitiveType> {
   }
 
   public toString(): string {
-    return this._value.toString();
+    return typeof this._value === 'object' ? JSON.stringify(this._value) : this._value.toString();
   }
 }

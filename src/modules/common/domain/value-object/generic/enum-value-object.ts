@@ -1,20 +1,27 @@
 import ValidationDomainException from '@common/domain/exceptions/validation.exception';
+import {
+  ValueObject,
+  ValueObjectPrimitiveType,
+} from '@common/domain/value-object/generic/value-object';
 
-import { ValueObject } from './value-object';
-
-export abstract class EnumValueObject<T> extends ValueObject<T> {
+export abstract class EnumValueObject<
+  VALUE extends ValueObjectPrimitiveType,
+  ENUM extends Record<string, VALUE>,
+> extends ValueObject<VALUE> {
   constructor(
-    value: T,
-    readonly validValues: T[],
+    value: VALUE,
+    private readonly enumValues: ENUM,
   ) {
     super(value);
-    this.checkValueIsValid(value);
+    this.ensureValueIsValid(value);
   }
 
-  private checkValueIsValid(value: T): void {
-    if (!this.validValues.includes(value)) {
+  private ensureValueIsValid(value: VALUE): void {
+    const isValidValue = Object.values(this.enumValues).includes(value);
+
+    if (!isValidValue) {
       throw new ValidationDomainException(
-        `Value <${value}> is not valid for enum ${this.constructor.name}. Valid values are: ${this.validValues.join(', ')}`,
+        `Invalid value "${value.toString()}" for enum "${this.constructor.name}"`,
       );
     }
   }
