@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Transport } from '@nestjs/microservices';
 
+import { EXTERNAL_COMMANDS } from '@common/infrastructure/controllers/external-commands';
 import { IHadesUserCreateRequest } from '@shared/domain/anti-corruption-layer/hades-user-schemas/create-user/hades-user-create.request';
 import { IHadesUserCreateResponse } from '@shared/domain/anti-corruption-layer/hades-user-schemas/create-user/hades-user.response';
 import { IHadesGatewayContract } from '@shared/domain/contracts/hades-user-gateway.contract';
@@ -16,12 +17,11 @@ import { FactoryMessageBrokerService } from '@shared/infrastructure/services/mes
 @Injectable()
 export class HadesGatewayService implements IHadesGatewayContract {
   private readonly logger = new Logger(HadesGatewayService.name);
-  constructor() {}
 
   private generateMessageBrokerBy(config: IMessageBrokerConfigType): IMessageBroker {
     try {
       const messageBroker = FactoryMessageBrokerService.create(config);
-      return messageBroker;
+      return messageBroker.config;
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       this.logger.error(`Error creating message broker: ${errorMessage}`);
@@ -91,7 +91,7 @@ export class HadesGatewayService implements IHadesGatewayContract {
 
     const response = await this.sendMessage<IHadesUserCreateRequest, IHadesUserCreateResponse>(
       messageBroker,
-      'UserWarpOnboard',
+      EXTERNAL_COMMANDS.HADES.USER.CREATE,
       request,
     );
 

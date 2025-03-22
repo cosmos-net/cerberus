@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { Transport } from '@nestjs/microservices';
 
 import {
@@ -7,17 +6,21 @@ import {
 } from '@shared/domain/contracts/message-broker.contract';
 import { NatsMessageBrokerService } from '@shared/infrastructure/services/message-brokers/nats-message-broker.services';
 
-@Injectable()
 export class FactoryMessageBrokerService {
-  public constructor(private readonly config: IMessageBrokerConfigType) {}
+  public constructor(private readonly brokerConfigType: IMessageBrokerConfigType) {
+    this.setup();
+  }
 
-  private getBroker(): IMessageBroker {
-    const { transport } = this.config;
+  private messageBroker: IMessageBroker;
+
+  private setup(): void {
+    const { transport } = this.brokerConfigType;
 
     switch (transport) {
       case Transport.NATS: {
-        this.validateOptions(this.config.options, 'NATS');
-        return new NatsMessageBrokerService(this.config.options);
+        this.validateOptions(this.brokerConfigType.options, 'NATS');
+        this.messageBroker = new NatsMessageBrokerService(this.brokerConfigType.options);
+        break;
       }
       case Transport.KAFKA: {
         throw new Error('Kafka message broker no implementado aún');
@@ -55,8 +58,11 @@ export class FactoryMessageBrokerService {
     throw new Error(`${message}: ${String(x)}`);
   }
 
-  public static create(config: IMessageBrokerConfigType): IMessageBroker {
-    const factory = new FactoryMessageBrokerService(config);
-    return factory.getBroker();
+  public get config(): IMessageBroker {
+    return this.messageBroker;
+  }
+
+  public static create(config: IMessageBrokerConfigType): FactoryMessageBrokerService {
+    return new FactoryMessageBrokerService(config);
   }
 }
