@@ -1,5 +1,7 @@
 {
   "conventionalCommits.scopes": [
-    "common"
+    "common",
+    "message-broker",
+    "dependencies"
   ]
 }
