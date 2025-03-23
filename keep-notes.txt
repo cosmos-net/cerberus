@@ -1,0 +1,4 @@
+Usar CQRS de nestjs
+Analizas procesos que requieras SAGAS
+
+Eventos de dominio vs sagas orquestados
