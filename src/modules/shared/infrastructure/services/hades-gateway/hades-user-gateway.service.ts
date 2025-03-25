@@ -29,18 +29,18 @@ export class HadesGatewayService implements IHadesGatewayContract {
     }
   }
 
-  private openConnection(messageBroker: IMessageBroker): Promise<void> {
+  private async openConnection(messageBroker: IMessageBroker): Promise<void> {
     try {
-      return messageBroker.connect();
+      await messageBroker.connect();
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       throw new HadesConnectionException(`Error opening connection: ${errorMessage}`);
     }
   }
 
-  private closeConnection(messageBroker: IMessageBroker): Promise<void> {
+  private async closeConnection(messageBroker: IMessageBroker): Promise<void> {
     try {
-      return messageBroker.close();
+      await messageBroker.close();
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       throw new HadesDisconnectionException(`Error closing connection: ${errorMessage}`);
@@ -53,7 +53,7 @@ export class HadesGatewayService implements IHadesGatewayContract {
     data: TInput,
   ): Promise<TResult> {
     try {
-      return messageBroker.send<TInput, TResult>(pattern, data);
+      return await messageBroker.send<TInput, TResult>(pattern, data);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       throw new HadesCommunicationException(`Error sending message: ${errorMessage}`);
