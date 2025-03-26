@@ -9,9 +9,9 @@ import {
 import { AuthenticationInjectionToken } from '@authentication/domain/constants/authentication-injection-token.constant';
 import { IPasswordEncryptionService } from '@authentication/domain/contracts/password-encryption-service.contract';
 import { ManagerPasswordPolicyService } from '@authentication/domain/services/manager-password-policy.service';
-import { IHadesUserCreateResponse } from '@shared/domain/anti-corruption-layer/hades-user-schemas/create-user/hades-user.response';
+import { IHadesUserCreateResponse } from '@shared/domain/anti-corruption-layer/hades-user-schemas/create-user/hades-user-create.response';
 import { SharedInjectionToken } from '@shared/domain/constants/shared-injection-token.constant';
-import { IHadesGatewayContract } from '@shared/domain/contracts/hades-user-gateway.contract';
+import { IHadesUserGatewayContract } from '@shared/domain/contracts/hades-user-gateway.contract';
 
 @Injectable()
 @CommandHandler(WarpAboardCommand)
@@ -22,7 +22,7 @@ export class WarpAboardCommandHandler
     @Inject(AuthenticationInjectionToken.PASSWORD_ENCRYPTION_SERVICE)
     private readonly passwordEncryptionService: IPasswordEncryptionService,
     @Inject(SharedInjectionToken.HADES_GATEWAY)
-    private readonly hadesGatewayContract: IHadesGatewayContract,
+    private readonly userGateway: IHadesUserGatewayContract,
     private readonly managerPasswordPolicyService: ManagerPasswordPolicyService,
   ) {}
 
@@ -31,7 +31,7 @@ export class WarpAboardCommandHandler
 
     const processedAccounts = await this.processAccounts(accounts, profile);
 
-    return this.hadesGatewayContract.UserWarpOnboard({
+    return this.userGateway.WarpOnboard({
       accounts: processedAccounts,
       profile,
     });
