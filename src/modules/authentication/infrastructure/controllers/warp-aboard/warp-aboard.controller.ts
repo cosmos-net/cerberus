@@ -6,7 +6,7 @@ import { WarpAboardCommand } from '@authentication/application/use-cases/command
 import { WarpAboardRequestDTO } from '@authentication/infrastructure/controllers/warp-aboard/warp-aboard-request.dto';
 import { WarpAboardResponseDto } from '@authentication/infrastructure/controllers/warp-aboard/warp-aboard-response.dto';
 import { EXTERNAL_COMMANDS } from '@common/infrastructure/controllers/external-commands';
-import { IHadesUserCreateResponse } from '@shared/domain/anti-corruption-layer/hades-user-schemas/create-user/hades-user.response';
+import { IHadesUserCreateResponse } from '@shared/domain/anti-corruption-layer/hades-user-schemas/create-user/hades-user-create.response';
 
 @Controller()
 export class WarpAboardController {
