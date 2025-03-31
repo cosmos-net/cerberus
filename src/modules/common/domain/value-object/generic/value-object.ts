@@ -3,11 +3,15 @@ import BusinessConflictDomainException from '@common/domain/exceptions/business-
 export type ValueObjectPrimitiveType = string | number | boolean | Date;
 
 export abstract class ValueObject<T extends ValueObjectPrimitiveType> {
-  readonly _value: T;
+  protected readonly _value: T;
 
   constructor(value: T) {
     this._value = value;
     this.ensureValueIsDefined(value);
+  }
+
+  get value(): T {
+    return this._value;
   }
 
   private ensureValueIsDefined(value: T): void {
