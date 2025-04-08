@@ -1,11 +1,12 @@
 import { ConfigModuleOptions } from '@nestjs/config';
 
+import { jwtLoader } from '@core/infrastructure/framework/loaders/jwt-loader';
 import { configSchema } from '@core/infrastructure/framework/schemas/config.schema';
 
-export const mainConfigOptions: ConfigModuleOptions = {
+export const configOption: ConfigModuleOptions = {
   cache: true,
   isGlobal: true,
-  load: [],
+  load: [jwtLoader.jwt],
   validationSchema: configSchema,
   validationOptions: {
     allowUnknown: true,
